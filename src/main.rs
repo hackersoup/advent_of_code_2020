@@ -6,6 +6,7 @@ use std::io::{BufReader, BufRead};
 fn main() -> Result<(), Box<Error>> {
     solve_01(BufReader::new(File::open("input/input_01")?));
     solve_02(BufReader::new(File::open("input/input_02")?));
+    solve_03(BufReader::new(File::open("input/input_03")?));
 
     Ok(())
 }
@@ -86,4 +87,20 @@ fn solve_02(input: BufReader<File>) {
     }
     println!("[+] Day02-1: {}", valid_passwords_count_part1);
     println!("[+] Day02-2: {}", valid_passwords_count_part2);
+}
+
+fn solve_03(input: BufReader<File>) {
+    let result = input.lines()
+        .fold((0, 0), |acc, line| {
+            let line = line.unwrap();
+            let index = acc.0 % line.len();
+            let result = match line.as_bytes()[index] == '#' as u8 {
+                true => acc.1 + 1,
+                false => acc.1
+            };
+
+            (index + 3, result)
+        }).1;
+
+    println!("[+] Day03-1: {}", result);
 }
