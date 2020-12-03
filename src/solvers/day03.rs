@@ -2,8 +2,6 @@ use std::io::{BufReader, BufRead};
 use std::fs::File;
 
 pub fn solve(input: BufReader<File>) {
-
-
     let lines = &input.lines()
         .map(|line| line.unwrap())
         .collect::<Vec<_>>();
