@@ -8,7 +8,6 @@ use nom::{
     bytes::complete::{
         take_while1, tag
     },
-    character::complete::space1,
     combinator::{
         map, opt
     },
@@ -33,16 +32,16 @@ pub fn solve(input: BufReader<File>) {
         match passport {
             Ok((_, _)) => {
                 counter += 1;
-                println!("--> {}", line);
-                println!("---> {:?}", passport);
+                //println!("--> {}", line);
+                //println!("---> {:?}", passport);
             },
-            Err(e) => {
+            Err(_) => {
                 //println!("----> {:?}", e);
             }
         }
     }
 
-    println!("[+] Counter: {}", counter);
+    println!("[+] Day04-1 BROKEN: {}", counter);
 }
 
 #[derive(Debug)]
