@@ -2,9 +2,7 @@ use std::io::{BufReader, BufRead};
 use std::fs::File;
 use nom::{
     IResult,
-    branch::{
-        permutation, alt
-    },
+    branch::alt,
     bytes::complete::{
         take_while1, tag
     },
@@ -28,20 +26,32 @@ pub fn solve(input: BufReader<File>) {
     
     let mut counter = 0;
     for line in lines {
-        let passport = passport(line);
-        match passport {
-            Ok((_, _)) => {
-                counter += 1;
-                //println!("--> {}", line);
-                //println!("---> {:?}", passport);
-            },
-            Err(_) => {
-                //println!("----> {:?}", e);
+        let l = String::from(line);
+        let mut l = l.split(' ').collect::<Vec<_>>();
+        l.sort();
+        let l = l.join(" ");
+
+        let valid = line.contains("byr:")
+            && line.contains("iyr:")
+            && line.contains("eyr:")
+            && line.contains("hgt:")
+            && line.contains("hcl:")
+            && line.contains("ecl:")
+            && line.contains("pid:");
+        if valid {
+            counter += 1;
+            let passport = passport(&l);
+            match &passport {
+                Ok(_) => {},
+                Err(_) => {
+                    //println!("{}", line);
+                    //println!("-> {:?}", e);
+                }
             }
         }
     }
 
-    println!("[+] Day04-1 BROKEN: {}", counter);
+    println!("[+] Day04-1: {}", counter);
 }
 
 #[derive(Debug)]
@@ -67,6 +77,45 @@ pub enum HeightUnit {
     Centimeters, Inches
 }
 
+pub fn passport(input: &str) -> IResult<&str, Passport> {
+    let (input,
+        (byr, _,
+        cid, _,
+        ecl, _,
+        eyr, _,
+        hcl, _,
+        hgt, _,
+        iyr, _,
+        pid)) = tuple((
+            passport_birthyear,
+            single_whitespace,
+            opt(passport_country_id),
+            opt(single_whitespace),
+            passport_eyecolor,
+            single_whitespace,
+            passport_expiration_year,
+            single_whitespace,
+            passport_haircolor,
+            single_whitespace,
+            passport_height,
+            single_whitespace,
+            passport_issue_year,
+            single_whitespace,
+            passport_id
+        ))(input)?;
+    
+    Ok((input, Passport {
+        birth_year: byr,
+        country_id: cid,
+        eyecolor: String::from(ecl),
+        exp_year: eyr,
+        haircolor: hcl,
+        height: hgt,
+        issue_year: iyr,
+        id: pid,
+    }))
+}
+/*
 /// Parse a Passport structure from a valid input string.
 pub fn passport(input: &str) -> IResult<&str, Passport> {
 
@@ -114,6 +163,7 @@ pub fn passport(input: &str) -> IResult<&str, Passport> {
         height: height
     }))
 }
+*/
 
 fn single_whitespace(input: &str) -> IResult<&str, &str> {
     alt((
