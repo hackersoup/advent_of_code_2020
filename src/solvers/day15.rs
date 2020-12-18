@@ -58,12 +58,6 @@ pub fn cached_rounds_until(numbers: &mut Vec<usize>, round_count: u32) {
 }
 
 pub fn solve(input: BufReader<File>) {
-    /*
-        My solution for this is really really bad, running the 30,000,000 round
-        count takes WAY too long to compute. There has to be a more efficient
-        way than what I am doing right now... Maybe some kind of cache with
-        a HashMap or an array?
-    */
     let line = input.lines()
         .map(|line| line.unwrap())
         .collect::<Vec<_>>()
