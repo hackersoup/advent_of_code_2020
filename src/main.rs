@@ -1,3 +1,5 @@
+#![feature(test)]
+
 use std::{error::Error, fs::File};
 use std::result::Result;
 use std::io::BufReader;
@@ -13,5 +15,8 @@ fn main() -> Result<(), Box<Error>> {
     solvers::day05::solve(BufReader::new(File::open("input/input_05")?));
     solvers::day06::solve(BufReader::new(File::open("input/input_06")?));
 
+    solvers::day12::solve(BufReader::new(File::open("input/input_12")?));
+
+    solvers::day15::solve(BufReader::new(File::open("input/input_15")?));
     Ok(())
 }
